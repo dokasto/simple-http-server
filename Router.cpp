@@ -6,7 +6,6 @@
 #include <vector>
 #include "Router.h"
 #include "Utils.h"
-#include <unordered_map>
 
 using std::string;
 using std::vector;
