@@ -23,7 +23,8 @@ bool Socket::listen() {
 
 int& Socket::accept() {
   int addrlen = sizeof(sockaddr);
-  return ::accept(sockfd, (struct sockaddr *) &sockaddr, (socklen_t*)&addrlen);
+  connection = ::accept(sockfd, (struct sockaddr *) &sockaddr, (socklen_t*)&addrlen);
+  return connection;
 }
 
 void Socket::close() {
