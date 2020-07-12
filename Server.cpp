@@ -33,7 +33,7 @@ void Server::listen() {
   }
 
   if(!socket->listen()) {
-    cout << "Failed to create socket" << endl;
+    cout << "Failed to start listener" << endl;
   }
 
   while(1) {
