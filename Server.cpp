@@ -1,3 +1,6 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wexceptions"
+
 #include <unistd.h> // For read
 #include <iostream> // For cout
 #include <string>
@@ -54,3 +57,5 @@ void Server::setupResponseHandler(int& connection) const {
   string response = this->router->createResponse(bufferString);
   ::send(connection, response.c_str(), response.size(), 0);
 }
+
+#pragma GCC diagnostic pop

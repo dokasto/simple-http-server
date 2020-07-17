@@ -31,3 +31,6 @@
 *.app
 
 main
+
+# Visual studio code
+.vscode
