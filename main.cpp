@@ -2,9 +2,8 @@
 
 int main() {
   const int port = 8080;
-  Server* server = new Server(port);
+  std::unique_ptr<Server> server(new Server(port));
   server->get("/", "index.html");
   server->listen();
-  delete server;
   return 0;
 }

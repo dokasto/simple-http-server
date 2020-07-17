@@ -7,33 +7,30 @@
 #include "Socket.h"
 #include "Utils.h"
 
-using std::string;
-using std::cout;
-using std::endl;
+using namespace std;
 
-Server::Server(const int& p) {
-  port = p;
-  this->router = new Router();
+Server::Server(const int& p) : port(move(p)) {
+  router = unique_ptr<Router>(new Router());
 }
 
-void Server::get(const string& path, const string& staticFile) {
+void Server::get(const string& path, const string& staticFile) const {
   this->router->setHTTPGet(path, staticFile);
 }
 
-void Server::listen() {
-  Socket* socket = new Socket();
+void Server::listen() const noexcept {
+  unique_ptr<Socket> socket(new Socket());
 
   if(!socket->create()) {
-    cout << "Failed to create socket" << endl;
+    throw runtime_error("Failed to create socket");
   }
 
   if(!socket->bind(port)) {
-    cout << "Failed to bind to port: " << port << endl;
+    throw runtime_error("Failed to bind to port: " + to_string(port));
     socket->close();
   }
 
   if(!socket->listen()) {
-    cout << "Failed to start listener" << endl;
+    throw runtime_error("Failed to start listener");
   }
 
   while(1) {
@@ -41,16 +38,15 @@ void Server::listen() {
     int& connection = socket->accept();
 
     if (connection < 0) {
-      cout << "Unable to accept connection: " << connection << endl;
+      throw runtime_error("Unable to accept connection: " + to_string(connection));
     }
 
     this->setupResponseHandler(connection);
-
     socket->close();
   }
 }
 
-void Server::setupResponseHandler(int& connection) {
+void Server::setupResponseHandler(int& connection) const {
   char buffer[3000];
   ::read(connection, buffer, 3000);
   string bufferString = buffer;

@@ -14,7 +14,7 @@ class Socket {
 
   public:
     bool create();
-    bool bind(const int port);
+    bool bind(const int& port);
     bool listen();
     int& accept();
     void close();

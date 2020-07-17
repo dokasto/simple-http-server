@@ -12,13 +12,13 @@ using std::string;
 class Server {
   public:
     Server(const int& p);
-    void get(const string& path, const string& staticFile);
-    void listen();
-    void setupResponseHandler(int& connection);
+    void get(const string& path, const string& staticFile) const;
+    void listen() const noexcept;
+    void setupResponseHandler(int& connection) const;
 
   private:
-    int port;
-    Router* router;
+    const int port;
+    std::unique_ptr<Router> router;
 };
 
 #endif

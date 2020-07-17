@@ -8,7 +8,7 @@ bool Socket::create() {
   return sockfd != -1;
 }
 
-bool Socket::bind(int port) {
+bool Socket::bind(const int& port) {
   sockaddr.sin_family = AF_INET;
   sockaddr.sin_addr.s_addr = INADDR_ANY;
 
