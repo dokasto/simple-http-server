@@ -15,9 +15,9 @@ void Router::setHTTPGet(const string& path, const string& staticFile) {
 }
 
 string Router::createResponse(string& requestStr) {
-  vector<string> tokens = splitStringByWhitespace(requestStr);
+  const vector<string> tokens = splitStringByWhitespace(requestStr);
   string responseFilePath = "404.html";
-  string HTTPVerb = tokens[0];
+  const string HTTPVerb = tokens[0];
   string requestPath = (tokens[1] == "") ? "/" : tokens[1] ;
 
   if (HTTPVerb == "GET" && HTTP_GET_FilePath.count(requestPath) > 0) {
