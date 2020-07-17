@@ -17,7 +17,7 @@ bool Socket::bind(const int& port) {
   return (::bind(sockfd, (struct sockaddr*)&sockaddr, sizeof(sockaddr)) >= 0);
 }
 
-bool Socket::listen() {
+bool Socket::listen() const {
   return (::listen(sockfd, 10) >= 0);
 }
 
@@ -27,6 +27,6 @@ int& Socket::accept() {
   return connection;
 }
 
-void Socket::close() {
+void Socket::close() const {
   ::close(connection);
 }

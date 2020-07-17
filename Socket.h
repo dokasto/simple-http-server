@@ -15,9 +15,9 @@ class Socket {
   public:
     bool create();
     bool bind(const int& port);
-    bool listen();
+    bool listen() const;
     int& accept();
-    void close();
+    void close() const;
 };
 
 #endif
