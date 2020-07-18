@@ -3,6 +3,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream> // For cout
+#include <mutex>
 #include "Utils.h"
 
 std::vector<std::string> splitStringByWhitespace(const std::string& str) {
@@ -20,6 +21,10 @@ void logger(std::string& data) {
 }
 
 std::string readStaticFileContent(std::string& filePath) {
+	// lock file with mutex
+	std::mutex mutex;
+	std::lock_guard<std::mutex> lock(mutex);
+	
   std::ifstream file;
   std::string staticFilePath = "./static/";
   staticFilePath.append(filePath);

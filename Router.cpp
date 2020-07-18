@@ -7,8 +7,7 @@
 #include "Router.h"
 #include "Utils.h"
 
-using std::string;
-using std::vector;
+using namespace std;
 
 void Router::setHTTPGet(const string& path, const string& staticFile) {
   HTTP_GET_FilePath[path] = staticFile;
@@ -26,7 +25,7 @@ string Router::createResponse(string& requestStr) {
 
   const string fileContent = readStaticFileContent(responseFilePath);
   string response = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: ";
-  response.append(std::to_string(fileContent.length()));
+  response.append(to_string(fileContent.length()));
   response.append("\n\n");
   response.append(fileContent);
   logger(response);
