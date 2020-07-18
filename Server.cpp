@@ -4,6 +4,7 @@
 #include <unistd.h> // For read
 #include <iostream> // For cout
 #include <string>
+#include <thread>
 #include <vector>
 #include "Server.h"
 #include "Router.h"
@@ -20,8 +21,8 @@ void Server::get(const string& path, const string& staticFile) const {
   this->router->setHTTPGet(path, staticFile);
 }
 
-void Server::listen() const noexcept {
-  unique_ptr<Socket> socket(new Socket());
+void Server::listen() noexcept {
+	socket = shared_ptr<Socket>(new Socket());
 
   if(!socket->create()) {
     throw runtime_error("Failed to create socket");
@@ -35,18 +36,23 @@ void Server::listen() const noexcept {
   if(!socket->listen()) {
     throw runtime_error("Failed to start listener");
   }
+	
+	// start connection in a new thread
+	thread connectionThread(&Server::createConnection, this);
+	connectionThread.join();
+}
 
-  while(1) {
-    cout << "Waiting for new connection" << endl;
-    int& connection = socket->accept();
-
-    if (connection < 0) {
-      throw runtime_error("Unable to accept connection: " + to_string(connection));
-    }
-
-    this->setupResponseHandler(connection);
-    socket->close();
-  }
+void Server::createConnection() noexcept {
+	while(1) {
+		cout << "Waiting for new connection" << endl;
+		int& connection = socket->accept();
+		
+		if (connection < 0) {
+			throw runtime_error("Unable to accept connection: " + to_string(connection));
+		}
+		
+		this->setupResponseHandler(connection);
+	}
 }
 
 void Server::setupResponseHandler(int& connection) const {
@@ -56,6 +62,8 @@ void Server::setupResponseHandler(int& connection) const {
   logger(bufferString);
   string response = this->router->createResponse(bufferString);
   ::send(connection, response.c_str(), response.size(), 0);
+	cout << "Closing connection connection: " << connection << endl;
+	socket->close();
 }
 
 #pragma GCC diagnostic pop
